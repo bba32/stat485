@@ -26,3 +26,21 @@ acf(pred_e_daily, plot = FALSE, lag.max = 40)
 ```
 
 From the correlogram, we can see that the white noise assumption would be rejected. 
+
+## Residual Analysis
+```{r}
+# Residual vs. Fitted Value plot
+daily$Date <- as.Date(daily$Date)
+model_linear = lm(Close ~ Date, daily)
+plot(daily$Date, daily$Close, main = "Stock Price vs. Date", xlab = "Date", ylab = "Stock Price")
+abline(model_linear, col = "red")
+
+residuals_values <- residuals(model_linear)
+fitted_values <- fitted(model_linear)
+
+# Create residuals vs. fitted values plot
+plot(fitted_values, residuals_values, main = "Residuals vs. Fitted Values", xlab = "Fitted Values", ylab = "Residuals", col = "blue")
+
+# Add a horizontal line at y = 0 for reference
+abline(h = 0, col = "red", lty = 2)
+```
