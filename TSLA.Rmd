@@ -25,4 +25,4 @@ acf(pred_e_daily, main = "Sample autocorrelation of predicted residuals", lag.ma
 acf(pred_e_daily, plot = FALSE, lag.max = 100) 
 ```
 
-From the correlogram we can see that the white nosie assumption would be rejected. 
+From the correlogram, we can see that the white nosie assumption would be rejected. 
