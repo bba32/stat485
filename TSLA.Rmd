@@ -19,9 +19,9 @@ library(tidyverse)
 ```{r}
 daily = read.csv("TSLA.day.csv")
 
-pred_e_daily=daily$Close-mean(daily$Close) # predicted residuals
+pred_e_daily = daily$Close - mean(daily$Close) # predicted residuals
 
-acf(pred_e_daily,main="Sample autocorrelation of predicted residuals", lag.max = 100)
-acf(pred_e_daily,plot=FALSE, lag.max = 100) 
+acf(pred_e_daily, main = "Sample autocorrelation of predicted residuals", lag.max = 100)
+acf(pred_e_daily, plot = FALSE, lag.max = 100) 
 ```
 
