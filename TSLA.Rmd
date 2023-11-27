@@ -17,12 +17,12 @@ library(tidyverse)
 
 ## Checking the autocorrelation function
 ```{r}
-daily = read.csv("TSLA.day.csv")
+TSLA.day = read.csv("TSLA.day.csv")
 
-pred_e_daily = daily$Close - mean(daily$Close) # predicted residuals
+pred_e_TSLA.day = TSLA.day$Close - mean(TSLA.day$Close) # predicted residuals
 
-acf(pred_e_daily, main = "Sample autocorrelation of predicted residuals", lag.max = 40)
-acf(pred_e_daily, plot = FALSE, lag.max = 40) 
+acf(pred_e_TSLA.day, main = "Sample autocorrelation of predicted residuals", lag.max = 40)
+acf(pred_e_TSLA.day, plot = FALSE, lag.max = 40) 
 ```
 
 From the correlogram, we can see that the white noise assumption would be rejected. 
@@ -30,9 +30,9 @@ From the correlogram, we can see that the white noise assumption would be reject
 ## Residual Analysis
 ```{r}
 # Residual vs. Fitted Value plot
-daily$Date <- as.Date(daily$Date)
-model_linear = lm(Close ~ Date, daily)
-plot(daily$Date, daily$Close, main = "Stock Price vs. Date", xlab = "Date", ylab = "Stock Price")
+TSLA.day$Date <- as.Date(TSLA.day$Date)
+model_linear = lm(Close ~ Date, TSLA.day)
+plot(TSLA.day$Date, TSLA.day$Close, main = "Stock Price vs. Date", xlab = "Date", ylab = "Stock Price")
 abline(model_linear, col = "red")
 
 residuals_values <- residuals(model_linear)
@@ -48,9 +48,9 @@ abline(h = 0, col = "red", lty = 2)
 ## Import Data
 
 ```{r}
-TSLA.day = read.csv("~/Documents/GitHub/stat485/TSLA.day.csv")
-TSLA.week = read.csv("~/Documents/GitHub/stat485/TSLA.week.csv")
-TSLA.month = read.csv("~/Documents/GitHub/stat485/TSLA.month.csv")
+TSLA.day = read.csv("TSLA.day.csv")
+TSLA.week = read.csv("TSLA.week.csv")
+TSLA.month = read.csv("TSLA.month.csv")
 
 ### Set date as date
 TSLA.day$Date <- as.Date(TSLA.day$Date)
@@ -121,3 +121,11 @@ acf(res.month,plot=FALSE) #Print r_k for predicted residuals
 
 
 ```
+
+```{r}
+TSLA.week = read.csv("TSLA.week.csv")
+
+TSLA.week = TSLA.week %>% 
+  mutate(weekly_return = (Close - Open)/Open)
+```
+
