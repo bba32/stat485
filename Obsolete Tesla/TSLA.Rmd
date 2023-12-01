@@ -1,0 +1,131 @@
+---
+title: "TSLA"
+output: html_document
+date: "2023-11-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# loading packages
+library(TSA)
+library(tidyverse)
+```
+
+## Residual Analysis
+
+
+## Checking the autocorrelation function
+```{r}
+TSLA.day = read.csv("TSLA.day.csv")
+
+pred_e_TSLA.day = TSLA.day$Close - mean(TSLA.day$Close) # predicted residuals
+
+acf(pred_e_TSLA.day, main = "Sample autocorrelation of predicted residuals", lag.max = 40)
+acf(pred_e_TSLA.day, plot = FALSE, lag.max = 40) 
+```
+
+From the correlogram, we can see that the white noise assumption would be rejected. 
+
+## Residual Analysis
+```{r}
+# Residual vs. Fitted Value plot
+TSLA.day$Date <- as.Date(TSLA.day$Date)
+model_linear = lm(Close ~ Date, TSLA.day)
+plot(TSLA.day$Date, TSLA.day$Close, main = "Stock Price vs. Date", xlab = "Date", ylab = "Stock Price")
+abline(model_linear, col = "red")
+
+residuals_values <- residuals(model_linear)
+fitted_values <- fitted(model_linear)
+
+# Create residuals vs. fitted values plot
+plot(fitted_values, residuals_values, main = "Residuals vs. Fitted Values", xlab = "Fitted Values", ylab = "Residuals", col = "blue")
+
+# Add a horizontal line at y = 0 for reference
+abline(h = 0, col = "red", lty = 2)
+```
+
+## Import Data
+
+```{r}
+TSLA.day = read.csv("TSLA.day.csv")
+TSLA.week = read.csv("TSLA.week.csv")
+TSLA.month = read.csv("TSLA.month.csv")
+
+### Set date as date
+TSLA.day$Date <- as.Date(TSLA.day$Date)
+TSLA.week$Date <- as.Date(TSLA.week$Date)
+TSLA.month$Date <- as.Date(TSLA.month$Date)
+```
+
+## Graphs
+```{r}
+### Plots By Day ###
+plot(TSLA.day$Date, TSLA.day$Close,
+     main ="TSLA Stock Close Price By Day",
+     ylab = "Close Stock Price", 
+     xlab = "Time",
+     type = "o"
+     )
+
+### Plots By Month ###
+plot(TSLA.month$Date, TSLA.month$Close,
+     main = "TSLA Stock Close Price By Month",
+     ylab = "Close Stock Price", 
+     xlab = "Time",
+     type = "o",
+     )
+
+### Plot Residuals Day ###
+day.lm = lm(Close~Date, data = TSLA.day)
+summary(day.lm)
+y.day = rstudent(day.lm)
+plot(TSLA.day$Date, y.day,
+     main = "ST Residusals of Stocks (Day)",
+     xlab = "Time",
+     ylab = "Residuals (Standardized)"
+     )
+
+### Plot Residuals Month ###
+month.lm = lm(Close~Date, data = TSLA.month)
+summary(month.lm)  
+y.month = rstandard(month.lm)
+plot(TSLA.month$Date, y.month,
+     main = "ST Residusals of Stocks (Month)",
+     xlab = "Time",
+     ylab = "Residuals (Standardized)"
+     )
+
+mean(TSLA.month$Close)
+res.month = TSLA.month$Close - mean(TSLA.month$Close) #Predicted residuals
+res.month = res.month/sd(res.month) # To use Standardized residuals
+
+plot(res.month,
+     type="o",
+     ylab="Values",
+     xlab="time")
+
+plot(y=res.month,
+     x=zlag(res.month,1),
+     ylab="Values at t",
+     xlab="Values at t1")
+
+hist(res.month,
+     main="Histogram of predicted residuals",
+     xlab="Predicted Residuals",breaks=10)
+
+qqnorm(res.month);qqline(res.month,col="purple")
+
+acf(res.month,main="Sample autocorrelation of predicted residuals")
+acf(res.month,plot=FALSE) #Print r_k for predicted residuals
+
+
+```
+
+```{r}
+TSLA.week = read.csv("TSLA.week.csv")
+
+TSLA.week = TSLA.week %>% 
+  mutate(weekly_return = (Close - Open)/Open)
+```
+

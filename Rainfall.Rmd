@@ -1,0 +1,27 @@
+---
+title: "Rainfall TS Analysis"
+author: "Zhiran Tong"
+date: "2023-12-01"
+output: pdf_document
+---
+
+```{r, message=FALSE}
+#Data Cleaning
+#Filter to Melbourne and keep date and rainfall columns
+library(readr)
+library(tidyverse)
+library(dplyr)
+data = read_csv('weatherAUS.csv')
+data = data[data$Location == "Perth", c(1, 2, 5)]
+data$Date <- as.Date(data$Date)
+data$Month <- format(data$Date, "%Y-%m")
+data <- aggregate(Rainfall ~ Month, data = data, FUN = mean, na.rm = TRUE)
+data_ts = ts(data$Rainfall)
+data = data.frame(ts(data))
+plot(x = data$Month, y = data$Rainfall, xlab = "Month", type = "o",
+     ylab = "Rainfall (mm)", main = "Monthly Average Rainfall in Perth")
+```
+
+```{r}
+acf(data_ts, lag = length(data_ts), main = "ACF Plot" )
+```
