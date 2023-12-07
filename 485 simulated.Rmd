@@ -54,32 +54,79 @@ ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
 # fit3 arma(3,2)
 fit3 = arima(ts_daily, order = c(3,0,2))
 fit3
-ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+ggtsdisplay(fit3$residuals, lag.max = 190, main = "ARMA(3,2)")
 
+# fit4 Trying seasonal 
+fit4 <- arima(ts_daily, order = c(1,0,0), seasonal = list(order = c(1,0,0)))
+fit4
+ggtsdisplay(fit4$residuals, lag.max=190, main = "ARMA(1,0)x(1,0)12 ")
 
+# fit5
+fit5 <- arima(ts_daily, order = c(2,0,1), seasonal = list(order = c(1,0,0))) 
+fit5 # there is NaN
+
+# fit6 => looks like best so far? 
+fit6 <- arima(ts_daily, order = c(3,0,2), seasonal = list(order = c(1,0,0)))
+fit6
+ggtsdisplay(fit6$residuals, lag.max=190, main = "ARMA(3,2)x(1,0)12 ")
+
+# fit 7
+fit7 <- arima(ts_daily, order = c(1,0,0), seasonal = list(order = c(2,0,1)))
+fit7 # NaN produced
+
+# fit8
+fit8 <- arima(ts_daily, order = c(1,0,0), seasonal = list(order = c(1,0,1)))
+fit8 # NaN produced
+ggtsdisplay(fit8$residuals, lag.max=190, main = "ARMA(1,0)x(1,1)12 ")
 
 qqnorm(ts_daily) 
 qqline(ts_daily, col = "red", lwd = 2)
+
+
+forecast(ts_daily, model = fit6, h = 10) 
 
 ```
 
 ```{r}
 # trying weekly data
 
-# fit1 arma(2,1)
-fit1 = arima(ts_weekly, order = c(2,0,1))
-fit1
-ggtsdisplay(fit$residuals, lag.max = 107, main = "ARMA(2,1)")
+# fit9 arma(2,1)
+fit9 = arima(ts_weekly, order = c(2,0,1))
+fit9
+ggtsdisplay(fit9$residuals, lag.max = 107, main = "ARMA(2,1)")
 
-# fit2 ar(1)
-fit2 = arima(ts_weekly, order = c(1,0,0))
-fit2
-ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
+# fit10 ar(1)
+fit10 = arima(ts_weekly, order = c(1,0,0))
+fit10
+ggtsdisplay(fit10$residuals, lag.max = 107, main = "AR(1)")
 
-# fit3 arma(3,2)
-fit3 = arima(ts_weekly, order = c(3,0,2))
-fit3
-ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+# fit11 arma(3,2)
+fit11 = arima(ts_weekly, order = c(3,0,2))
+fit11
+ggtsdisplay(fit11$residuals, lag.max = 107, main = "ARMA(3,2)")
+
+# fit4 Trying seasonal 
+#fit12 <- arima(ts_weekly, order = c(1,0,0), seasonal = list(order = c(1,0,0)))
+#fit12
+#ggtsdisplay(fit12$residuals, lag.max=190, main = "ARMA(1,0)x(1,0)12 ")
+
+# fit13
+#fit13 <- arima(ts_weekly, order = c(2,0,1), seasonal = list(order = c(1,0,0))) 
+#fit13 # there is NaN
+
+# fit14 
+#fit14 <- arima(ts_weekly, order = c(3,0,2), seasonal = list(order = c(1,0,0)))
+#fit14
+#ggtsdisplay(fit14$residuals, lag.max=190, main = "ARMA(3,2)x(1,0)12 ")
+
+# fit 15
+#fit15 <- arima(ts_weekly, order = c(1,0,0), seasonal = list(order = c(2,0,1)))
+#fit15 # NaN produced
+
+# fit 16
+#fit16 <- arima(ts_weekly, order = c(1,0,0), seasonal = list(order = c(1,0,1)))
+#fit16 # NaN produced
+#ggtsdisplay(fit16$residuals, lag.max=190, main = "ARMA(1,0)x(1,1)12 ")
 
 qqnorm(ts_weekly) 
 qqline(ts_weekly, col = "red", lwd = 2)
@@ -89,20 +136,43 @@ qqline(ts_weekly, col = "red", lwd = 2)
 ```{r}
 # trying mothly data
 
-# fit1 arma(2,1)
-fit1 = arima(ts_monthly, order = c(2,0,1))
-fit1
-ggtsdisplay(fit$residuals, lag.max = 107, main = "ARMA(2,1)")
+# fit17 arma(2,1)
+fit17 = arima(ts_monthly, order = c(2,0,1))
+fit17
+ggtsdisplay(fit17$residuals, lag.max = 107, main = "ARMA(2,1)")
 
-# fit2 ar(1)
-fit2 = arima(ts_monthly, order = c(1,0,0))
-fit2
-ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
+# fit18 ar(1)
+fit18 = arima(ts_monthly, order = c(1,0,0))
+fit18
+ggtsdisplay(fit18$residuals, lag.max = 107, main = "AR(1)")
 
-# fit3 arma(3,2)
-fit3 = arima(ts_monthly, order = c(3,0,2))
-fit3
-ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+# fit19 arma(3,2)
+fit19 = arima(ts_monthly, order = c(3,0,2))
+fit19
+ggtsdisplay(fit19$residuals, lag.max = 107, main = "ARMA(3,2)")
+
+# fit20 Trying seasonal 
+#fit20 <- arima(ts_monthly, order = c(1,0,0), seasonal = list(order = c(1,0,0)))
+#fit20
+#ggtsdisplay(fit20$residuals, lag.max=190, main = "ARMA(1,0)x(1,0)12 ")
+
+# fit21
+#fit21 <- arima(ts_monthly, order = c(2,0,1), seasonal = list(order = c(1,0,0))) 
+#fit21 # there is NaN
+
+# fit22 => looks like best so far? 
+#fit22 <- arima(ts_monthly, order = c(3,0,2), seasonal = list(order = c(1,0,0)))
+#fit22
+#ggtsdisplay(fit22$residuals, lag.max=190, main = "ARMA(3,2)x(1,0)12 ")
+
+# fit23
+#fit23 <- arima(ts_monthly, order = c(1,0,0), seasonal = list(order = c(2,0,1)))
+#fit23 # NaN produced
+
+# fit24
+#fit24 <- arima(ts_monthly, order = c(1,0,0), seasonal = list(order = c(1,0,1)))
+#fit24 # NaN produced
+#ggtsdisplay(fit24$residuals, lag.max=190, main = "ARMA(1,0)x(1,1)12 ")
 
 qqnorm(ts_monthly) 
 qqline(ts_monthly, col = "red", lwd = 2)
