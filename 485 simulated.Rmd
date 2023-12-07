@@ -1,0 +1,110 @@
+---
+title: "485 simulated"
+output: html_document
+date: "2023-12-07"
+---
+
+```{r}
+library(dplyr)
+library(forecast)
+
+data <- read.csv("team9.csv")
+
+# Create additional columns for week and month
+data$w <- rep(1:100, length.out = nrow(data), each = 7)
+data$m <- rep(1:100, length.out = nrow(data), each = 30)
+
+# Create daily time series
+ts_daily <- ts(data$x, frequency = 1)
+
+# Create weekly time series
+ts_weekly <- ts(aggregate(x = list(mean_value = data$x), by = list(w = data$w), FUN = mean)$mean_value, frequency = 52)
+
+# Create monthly time series
+ts_monthly <- ts(aggregate(x = list(mean_value = data$x), by = list(m = data$m), FUN = mean)$mean_value, frequency = 12)
+
+# Plot ACF and PACF for daily time series
+acf(ts_daily)
+pacf(ts_daily)
+
+# Plot ACF and PACF for weekly time series
+acf(ts_weekly)
+pacf(ts_weekly)
+
+# Plot ACF and PACF for monthly time series
+acf(ts_monthly)
+pacf(ts_monthly)
+
+
+```
+
+```{r}
+# trying daily data
+
+# fit1 arma(2,1)
+fit1 = arima(ts_daily, order = c(2,0,1))
+fit1
+ggtsdisplay(fit$residuals, lag.max = 107, main = "ARMA(2,1)")
+
+# fit2 ar(1)
+fit2 = arima(ts_daily, order = c(1,0,0))
+fit2
+ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
+
+# fit3 arma(3,2)
+fit3 = arima(ts_daily, order = c(3,0,2))
+fit3
+ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+
+
+
+qqnorm(ts_daily) 
+qqline(ts_daily, col = "red", lwd = 2)
+
+```
+
+```{r}
+# trying weekly data
+
+# fit1 arma(2,1)
+fit1 = arima(ts_weekly, order = c(2,0,1))
+fit1
+ggtsdisplay(fit$residuals, lag.max = 107, main = "ARMA(2,1)")
+
+# fit2 ar(1)
+fit2 = arima(ts_weekly, order = c(1,0,0))
+fit2
+ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
+
+# fit3 arma(3,2)
+fit3 = arima(ts_weekly, order = c(3,0,2))
+fit3
+ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+
+qqnorm(ts_weekly) 
+qqline(ts_weekly, col = "red", lwd = 2)
+
+```
+
+```{r}
+# trying mothly data
+
+# fit1 arma(2,1)
+fit1 = arima(ts_monthly, order = c(2,0,1))
+fit1
+ggtsdisplay(fit$residuals, lag.max = 107, main = "ARMA(2,1)")
+
+# fit2 ar(1)
+fit2 = arima(ts_monthly, order = c(1,0,0))
+fit2
+ggtsdisplay(fit2$residuals, lag.max = 107, main = "AR(1)")
+
+# fit3 arma(3,2)
+fit3 = arima(ts_monthly, order = c(3,0,2))
+fit3
+ggtsdisplay(fit3$residuals, lag.max = 107, main = "ARMA(3,2)")
+
+qqnorm(ts_monthly) 
+qqline(ts_monthly, col = "red", lwd = 2)
+
+```
