@@ -25,3 +25,267 @@ plot(x = data$Month, y = data$Rainfall, xlab = "Month", type = "o",
 ```{r}
 acf(data_ts, lag = length(data_ts), main = "ACF Plot" )
 ```
+
+```{r}
+
+fit0 = arima(data_ts, order = c(0,0,1))
+fit0
+ggtsdisplay(fit0$residuals, lag.max = 190, main = "MA(1)")
+
+# fit1 arma(2,1)
+fit1 = arima(data_ts, order = c(2,0,1))
+fit1
+ggtsdisplay(fit1$residuals, lag.max = 190, main = "ARMA(2,1)")
+
+# fit2 ar(1)
+fit2 = arima(data_ts, order = c(1,0,0))
+fit2
+ggtsdisplay(fit2$residuals, lag.max = 190, main = "AR(1)")
+
+# fit3 arma(3,2)
+fit3 = arima(data_ts, order = c(3,0,2))
+fit3
+ggtsdisplay(fit3$residuals, lag.max = 190, main = "ARMA(3,2)")
+
+# fit3 arma(3,2)
+fit13 = arima(data_ts, order = c(2,0,1))
+fit13
+ggtsdisplay(fit13$residuals, lag.max = 20, main = "ARMA(2,1)")
+pacf(data_ts)
+acf(data_ts)
+eacf(data_ts)
+
+# fit4 Trying seasonal 
+fit4 <- arima(data_ts, order = c(1,0,0), seasonal = list(order = c(1,0,0)))
+fit4
+ggtsdisplay(fit4$residuals, lag.max=190, main = "ARMA(1,0)x(1,0)12 ")
+
+# fit5
+fit5 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(1,0,0))) 
+fit5 
+ggtsdisplay(fit5$residuals, lag.max=190, main = "ARMA(2,1)x(1,0)12 ")
+
+# fit6 => looks like best so far? 
+fit6 <- arima(data_ts, order = c(3,0,2), seasonal = list(order = c(1,0,0)))
+fit6
+ggtsdisplay(fit6$residuals, lag.max=190, main = "ARMA(3,2)x(1,0)12 ")
+
+# fit 7
+fit7 <- arima(data_ts, order = c(1,0,0), seasonal = list(order = c(2,0,1)))
+fit7 # NaN produced
+
+# fit8
+fit8 <- arima(data_ts, order = c(1,0,0), seasonal = list(order = c(1,0,1)))
+fit8 # NaN produced
+ggtsdisplay(fit8$residuals, lag.max=190, main = "ARMA(1,0)x(1,1)12 ")
+
+
+```
+```{r}
+# Assuming fit1 is already defined as arima(data_ts, order = c(2,0,1))
+
+# Print the summary of the ARIMA model
+summary(fit1)
+
+# Extracting coefficients
+coefficients <- coef(fit1)
+print(coefficients)
+
+
+
+# Extracting sigma^2 estimate, log-likelihood, and AIC
+sigma_squared <- fit1$sigma^2
+log_likelihood <- logLik(fit1)
+aic <- AIC(fit1)
+
+print(paste("Sigma^2 Estimate:", sigma_squared))
+print(paste("Log Likelihood:", log_likelihood))
+print(paste("AIC:", aic))
+
+# Diagnostic plots
+library(forecast)  # Make sure the forecast package is loaded for ggtsdisplay
+ggtsdisplay(fit1$residuals, lag.max = 190, main = "ARMA(2,1)")
+
+```
+
+```{r}
+example = read.csv("Ch5_example.csv")
+ts = ts(example$x)
+
+plot(ts)
+fit0 = arima(data_ts, order = c(0,0,1))
+fit0
+ggtsdisplay(fit0$residuals, lag.max = 190, main = "MA(1)")
+
+# fit1 arma(2,1)
+fit1 = arima(ts, order = c(2,0,1))
+fit1
+ggtsdisplay(fit1$residuals, lag.max = 190, main = "ARMA(2,1)")
+
+# fit2 ar(1)
+fit2 = arima(ts, order = c(1,0,0))
+fit2
+ggtsdisplay(fit2$residuals, lag.max = 190, main = "AR(1)")
+
+# fit3 arma(3,2)
+fit3 = arima(ts, order = c(3,0,2))
+fit3
+ggtsdisplay(fit3$residuals, lag.max = 190, main = "ARMA(3,2)")
+
+# fit4 Trying seasonal 
+fit4 <- arima(ts, order = c(1,0,0), seasonal = list(order = c(1,0,0)))
+fit4
+ggtsdisplay(fit4$residuals, lag.max=190, main = "ARMA(1,0)x(1,0)12 ")
+
+# fit5
+fit5 <- arima(ts, order = c(2,0,1), seasonal = list(order = c(1,0,0))) 
+fit5 
+ggtsdisplay(fit5$residuals, lag.max=190, main = "ARMA(2,1)x(1,0)12 ")
+
+# fit6 => looks like best so far? 
+fit6 <- arima(ts, order = c(3,0,2), seasonal = list(order = c(1,0,0)))
+fit6
+ggtsdisplay(fit6$residuals, lag.max=190, main = "ARMA(3,2)x(1,0)12 ")
+
+# fit 7
+fit7 <- arima(ts, order = c(1,0,0), seasonal = list(order = c(2,0,1)))
+fit7 # NaN produced
+
+# fit8
+fit8 <- arima(ts, order = c(1,0,0), seasonal = list(order = c(1,0,1)))
+fit8 # NaN produced
+ggtsdisplay(fit8$residuals, lag.max=190, main = "ARMA(1,0)x(1,1)12 ")
+
+```
+
+
+```{r}
+library(forecast)
+
+# Create an empty data frame to store results
+result_df <- data.frame(p = integer(),
+                        d = integer(),
+                        q = integer(),
+                        aic = numeric(),
+                        stringsAsFactors = FALSE)
+
+# Set the possible values for p, d, q
+possible_p <- c(0, 1, 2, 3)
+possible_d <- c(0, 1)
+possible_q <- c(0, 1, 2, 3)
+
+for (p in possible_p) {
+  for (d in possible_d) {
+    for (q in possible_q) {
+      order <- c(p, d, q)
+      
+      model <- tryCatch(arima(data_ts, order = order), error = function(e) e)
+      
+      # Check if the model converged
+      if (!inherits(model, "error")) {
+        aic <- AIC(model)
+        
+        # Store results in the data frame
+        result_df <- rbind(result_df, c(p, d, q, aic))
+      }
+    }
+  }
+}
+
+# Rename the columns
+colnames(result_df) <- c("p", "d", "q", "aic")
+
+# Sort the data frame by the 'aic' column in increasing order
+result_df <- result_df[order(result_df$aic), ]
+
+# Display the sorted data frame
+print(result_df)
+```
+
+```{r}
+
+# Creating an empty dataframe
+custom_sarima_df <- data.frame(
+  p = numeric(),
+  d = numeric(),
+  q = numeric(),
+  P = numeric(),
+  D = numeric(),
+  Q = numeric(),
+  aic = numeric(),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+# I was trying to make a loop that takes the result_df parameter as a input but i can not figure out so  i just run top 3 models from result_df and run 10 times of the code under to get custom_sarima_df 
+
+#=> i created the dataframe of custom_sarima_data on a next chunk 
+
+library(forecast)
+
+# Assuming you have a time series object named 'ts' and fit1 is already defined
+# Example time series data (replace this with your actual data)
+# ts <- ...
+
+# Non-seasonal order from fit1
+non_seasonal_order <- c(1,0,2)
+
+# Set the maximum values for seasonal orders
+max_P <- 3
+max_D <- 1
+max_Q <- 3
+
+# Initialize variables to store the best seasonal order and minimum AIC
+best_seasonal_order <- c(0, 0, 0)
+min_aic <- Inf
+
+# Loop through different seasonal orders
+for (P in 0:max_P) {
+  for (D in 0:max_D) {
+    for (Q in 0:max_Q) {
+      seasonal_order <- c(P, D, Q)
+      
+      # Fit SARIMA model with the current seasonal order
+      current_fit <- Arima(data_ts, order = non_seasonal_order, seasonal = list(order = seasonal_order))
+      
+      # Calculate AIC for the current model
+      current_aic <- AIC(current_fit)
+      
+      # Check if the current model has a lower AIC
+      if (current_aic < min_aic) {
+        min_aic <- current_aic
+        best_seasonal_order <- seasonal_order
+      }
+    }
+  }
+}
+
+# Print the best seasonal order
+cat("Best Seasonal Order:", best_seasonal_order, "\n")
+cat("Minimum AIC:", min_aic, "\n")
+
+
+custom_sarima_df[10,] = c(non_seasonal_order, best_seasonal_order,min_aic)
+print(custom_sarima_df)
+```
+
+```{r}
+
+
+# Create a dataset using custom_sarima_df values
+custom_sarima_data <- data.frame(
+  p = c(3, 3, 3, 3, 3, 3, 3, 0, 0, 1),
+  d = c(0, 0, 1, 0, 1, 0, 1, 0, 1, 0),
+  q = c(2, 3, 3, 1, 2, 0, 1, 2, 3, 2),
+  P = c(2, 0, 2, 2, 2, 2, 2, 2, 2, 3),
+  D = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  Q = c(0, 2, 0, 2, 1, 2, 2, 3, 3, 3),
+  aic = c(344.4712, 345.9116, 347.3028, 346.1269, 347.3028, 344.4712, 347.3028, 345.4476, 348.2711, 348.4032)
+)
+
+# Display the created dataset
+print(custom_sarima_data)
+
+
+```
