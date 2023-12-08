@@ -289,3 +289,11 @@ print(custom_sarima_data)
 
 
 ```
+```{r}
+fit6 <- arima(data_ts, order = c(3,0,2), seasonal = list(order = c(2,0,0)))
+fit6
+ggtsdisplay(fit6$residuals, lag.max=190, main = "ARMA(3,2)x(2,0)12 ")
+
+forecast(fit6, h = 12) %>% plot(main ="ARMA(3,2)x(2,0)12 forecast model, h = 12")
+
+```
