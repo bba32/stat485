@@ -20,8 +20,20 @@ plot(x = data$Month, y = data$Rainfall, xlab = "Month", type = "o",
 ```
 
 ```{r}
-acf(data_ts, lag = length(data_ts), main = "ACF Plot" )
-pacf(data_ts, lag = length(data_ts), main = "PACF Plot")
+## Box Jenkins Method
+library(TSA)
+#Sample ACF
+acf(data_ts, lag = length(data_ts), main="Perth Monthly Average
+Rainfall\n(ACF)")
+
+#Sample ACF (Two Years)
+acf(data_ts, lag = 24, main="Perth Monthly Average Rainfall\n(24 Months)",xlab="Lag (Months)")
+
+#Sample PACF
+pacf(data_ts, lag = 24, main= "Perth Monthly Average Rainfall\n(PACF)", xlab="Lag (Months)")
+
+#Sample EACF
+eacf(data_ts) ## Maybe a ARMA(3,2), possibly (2,1)
 ```
 
 ```{r}
