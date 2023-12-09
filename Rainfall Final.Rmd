@@ -69,42 +69,12 @@ fit2110
 ggtsdisplay(fit2110$residuals, lag.max=107, main = "ARMA(2,1)x(1,0)12")
 checkresiduals(fit2110)
 
-#ARMA(0,0)x(1,1) significant, residual is not white noise, seasonal model AR(1) is negative???
-fit0011 <- arima(data_ts, order = c(0,0,0), seasonal = list(order = c(1,0,1), period = 12))
-fit0011
-ggtsdisplay(fit0011$residuals, lag.max=107, main = "ARMA(0,0)x(1,1)12")
-checkresiduals(fit0011)
-
-#ARMA(1,0)x(1,1) significant, residual is not white noise
-fit1011 <- arima(data_ts, order = c(1,0,0), seasonal = list(order = c(1,0,1), period = 12))
-fit1011
-ggtsdisplay(fit1011$residuals, lag.max=107, main = "ARMA(1,0)x(1,1)12")
-checkresiduals(fit1011)
-
-#ARMA(2,1)x(1,1) significant, residual is very close to white noise
-fit2111 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(1,0,1), period = 12))
-fit2111
-ggtsdisplay(fit2111$residuals, lag.max=107, main = "ARMA(2,1)x(1,1)12")
-checkresiduals(fit2111)
-
 #ARMA(2,1)x(2,1) significant, residual is not white noise
 fit2121 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(2,0,1), period = 12))
 fit2121
 ggtsdisplay(fit2121$residuals, lag.max=107, main = "ARMA(2,1)x(2,1)12")
 checkresiduals(fit2121)
 
-#ARMA(3,2)x(1,1) significant, residual is very close to white noise, best so far
-fit3211 <- arima(data_ts, order = c(3,0,2), seasonal = list(order = c(1,0,1), period = 12))
-fit3211
-ggtsdisplay(fit3211$residuals, lag.max=107, main = "ARMA(3,2)x(1,1)12")
-checkresiduals(fit3211)
-
-#ARMA(3,2)x(2,1) SAR1 SMA1 is not significant???, residual is white noise
-
-fit3221 <- arima(data_ts, order = c(3,0,2), seasonal = list(order = c(2,0,1), period = 12))
-fit3221
-#ggtsdisplay(fit3211$residuals, lag.max=107, main = "ARMA(3,2)x(2,1)12")
-checkresiduals(fit3221)
 
 
 ```
@@ -128,4 +98,5 @@ fore2110 <- forecast(data_ts,model = fit2110, h = 12)
 plot(fore2110, xlab = "Month", ylab = "Precipitation (mm)",main = "12 Month
 Precipitation Forecast Using ARMA(2,1)x(1,0)12")
 ```
+
 
