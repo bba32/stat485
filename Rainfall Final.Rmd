@@ -12,7 +12,7 @@ library(readr)
 library(tidyverse)
 library(dplyr)
 data = read_csv('Perth_Rainfall.csv')
-data$Month <- format(as.Date(paste("01-", data$Month, sep = ""), format = "%d-%b-%y"),"%Y-%m")
+data$Month <- format(as.Date(paste(data$Month, sep = "","-01"), format = "%y-%b-%d"),"%Y-%m")
 data_ts = ts(data$Rainfall)
 data = data.frame(ts(data))
 plot(x = data$Month, y = data$Rainfall, xlab = "Month", type = "o",
