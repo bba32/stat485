@@ -92,7 +92,8 @@ new$Date = paste(new$Year, new$Month, new$Day, sep = "-")
 
 new$Date <- as.Date(new$Date)
 new$Month <- format(new$Date, "%Y-%m")
-new <- new[new$Date >= "2008-07-01" & new$Date <= "2018-06-25",]# original data is ended at 2017-06-25 so one more year
+new <- new[new$Date >= "2008-07-01" & new$Date <= "2018-06-25",]
+# original data is ended at 2017-06-25 so one more year
 original = new[new$Date >= "2008-07-01" & new$Date <= "2017-06-25",]
 nrow(original)
 
@@ -112,8 +113,6 @@ new_ts = ts(new$Rainfall)
 original_ts = ts(original$Rainfall)
 new = data.frame(ts(new))
 original = data.frame(ts(original))
-
-# i dont recommend running the code, i will post the result of the plot on whatsapp
 
 #plot(x = new$Month, y = new$Rainfall, xlab = "Month", type = "o",
 #     ylab = "Rainfall (mm)", main = "Actual Monthly Average Rainfall in Perth #(108 + 12 Month)") 
