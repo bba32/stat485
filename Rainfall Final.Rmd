@@ -1,13 +1,12 @@
 ---
 title: "Rainfall TS Analysis"
-author: "Zhiran Tong"
+author: "Team 9"
 date: "2023-12-01"
 output: pdf_document
 ---
 
-```{r, message=FALSE}
+```{r, message=FALSE, results='hide', fig.keep = "none"}
 #Data Cleaning
-#Filter to Perth and keep date and rainfall columns
 library(readr)
 library(tidyverse)
 library(dplyr)
@@ -19,7 +18,7 @@ plot(x = data$Month, y = data$Rainfall, xlab = "Month", type = "o",
      ylab = "Rainfall (mm)", main = "Monthly Average Rainfall in Perth")
 ```
 
-```{r}
+```{r, results='hide', fig.keep = "none", message=FALSE}
 ## Box Jenkins Method
 library(TSA)
 #Sample ACF
@@ -36,7 +35,7 @@ pacf(data_ts, lag = 24, main= "Perth Monthly Average Rainfall\n(PACF)", xlab="La
 eacf(data_ts) ## Maybe a ARMA(3,2), possibly (2,1)
 ```
 
-```{r}
+```{r, results='hide', fig.keep = "none", message=FALSE}
 #Dynamics Method
 library(TSA)
 library(forecast)
@@ -74,14 +73,14 @@ checkresiduals(fit2121)
 
 ```
 
-```{r}
+```{r, results='hide', fig.keep = "none", message=FALSE}
 #Forecasting
 fore2110 <- forecast(data_ts,model = fit2110, h = 12)
 plot(fore2110, xlab = "Month", ylab = "Precipitation (mm)",main = "12 Month
 Precipitation Forecast Using ARMA(2,1)x(1,0)12")
 ```
 
-```{r}
+```{r, results='hide', fig.keep = "none", message=FALSE}
 #Validating
 library(readr)
 
