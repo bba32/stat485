@@ -41,58 +41,40 @@ eacf(data_ts) ## Maybe a ARMA(3,2), possibly (2,1)
 library(TSA)
 library(forecast)
 
-#ARMA(1,0) significant, residual is not white noise
+#ARMA(1,0)
 fit10 <- arima(data_ts, order = c(1,0,0))
 fit10
 ggtsdisplay(fit10$residuals, lag.max=107, main = "ARMA(1,0)")
 checkresiduals(fit10)
 
-#ARMA(2,1) significant, residual is not white noise
+#ARMA(2,1)
 fit21 <- arima(data_ts, order = c(2,0,1))
 fit21
 ggtsdisplay(fit21$residuals, lag.max=107, main = "ARMA(2,1)")
 checkresiduals(fit21)
 
-#ARMA(3,2) significant, residual is not white noise
+#ARMA(3,2)
 fit32 <- arima(data_ts, order = c(3,0,2))
 fit32
 ggtsdisplay(fit32$residuals, lag.max=107, main = "ARMA(3,2)")
 checkresiduals(fit32)
 
 
-#ARMA(2,1)x(1,0) significant, 2se does not drop it lower than 0
-#This is potentially our best model
-#Residual very close to white noise, 2 lags are a little significant but no big deal
-#aic or se^2 is for model comparison, see if using a different model changes them a lot
+#ARMA(2,1)x(1,0)
 fit2110 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(1,0,0), period = 12))
 fit2110
 ggtsdisplay(fit2110$residuals, lag.max=107, main = "ARMA(2,1)x(1,0)12")
 checkresiduals(fit2110)
 
-#ARMA(2,1)x(2,1) significant, residual is not white noise
+#ARMA(2,1)x(2,1)
 fit2121 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(2,0,1), period = 12))
 fit2121
 ggtsdisplay(fit2121$residuals, lag.max=107, main = "ARMA(2,1)x(2,1)12")
 checkresiduals(fit2121)
 
-
-
 ```
 
 ```{r}
-#data = read_csv('weatherAUS.csv')
-# calculating proportion of missing data
-# data = data[, c(1, 2, 5)]
-# sum(is.na(data))/nrow(data)
-#data = data[data$Location == "Perth", c(1, 2, 5)]
-#data$Date <- as.Date(data$Date)
-# daily rainfall
-# data_d = data.frame(ts(data))
-# plot(x = data_d$Date, y = data_d$Rainfall, xlab = "Daily", type = "o",
-#      ylab = "Rainfall (mm)", main = "Daily Average Rainfall in Perth")
-# fit1 <- arima(data_ts, order = c(2,0,1), seasonal = list(order = c(1,0,1), period= 12))
-# fit1
-
 #Forecasting
 fore2110 <- forecast(data_ts,model = fit2110, h = 12)
 plot(fore2110, xlab = "Month", ylab = "Precipitation (mm)",main = "12 Month
@@ -100,8 +82,7 @@ Precipitation Forecast Using ARMA(2,1)x(1,0)12")
 ```
 
 ```{r}
-
-# Code for figure 3.1 . 
+# Code for figure 3.1
 library(readr)
 
 new<- read_csv("IDCJAC0009_009021_1800_Data.csv") #daily dataset
