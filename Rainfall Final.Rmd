@@ -99,4 +99,48 @@ plot(fore2110, xlab = "Month", ylab = "Precipitation (mm)",main = "12 Month
 Precipitation Forecast Using ARMA(2,1)x(1,0)12")
 ```
 
+```{r}
+
+# Code for figure 3.1 . 
+library(readr)
+
+new<- read_csv("IDCJAC0009_009021_1800_Data.csv") #daily dataset
+new = new[, c(3,4,5,6)]
+new = new[new$Year > "2007",]
+new$Date = paste(new$Year, new$Month, new$Day, sep = "-")
+
+new$Date <- as.Date(new$Date)
+new$Month <- format(new$Date, "%Y-%m")
+new <- new[new$Date >= "2008-07-01" & new$Date <= "2018-06-25",]# original data is ended at 2017-06-25 so one more year
+original = new[new$Date >= "2008-07-01" & new$Date <= "2017-06-25",]
+nrow(original)
+
+new = new[,c(2,4)]
+original = original[,c(2,4)]
+colnames(new) = c("Month", "Rainfall")
+colnames(original) = c("Month", "Rainfall")
+# new %>% is.na() %>% sum() no NA
+
+
+new <- aggregate(Rainfall ~ Month, data = new, FUN = mean, na.rm = TRUE)
+nrow(new)
+original = aggregate(Rainfall ~ Month, data = original, FUN = mean, na.rm = TRUE)
+nrow(original)
+
+new_ts = ts(new$Rainfall)
+original_ts = ts(original$Rainfall)
+new = data.frame(ts(new))
+original = data.frame(ts(original))
+
+# i dont recommend running the code, i will post the result of the plot on whatsapp
+
+#plot(x = new$Month, y = new$Rainfall, xlab = "Month", type = "o",
+#     ylab = "Rainfall (mm)", main = "Actual Monthly Average Rainfall in Perth #(108 + 12 Month)") 
+#points(x = original$Month, y = original$Rainfall, col = "blue", pch = 16, type = "l")
+##points(x = data$Month, y = data$Rainfall, col = "red", pch = 16, type = "l")
+#abline(v = 108, col = "blue", lty = 2)
+#legend("topright", legend = c( "Extended Period"),
+#       col = c( "blue"), pch = 16, lty =2, cex = 0.8)
+```
+
 
