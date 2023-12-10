@@ -37,7 +37,7 @@ eacf(data_ts) ## Maybe a ARMA(3,2), possibly (2,1)
 ```
 
 ```{r}
-#Dynamic Method
+#Dynamics Method
 library(TSA)
 library(forecast)
 
@@ -82,7 +82,7 @@ Precipitation Forecast Using ARMA(2,1)x(1,0)12")
 ```
 
 ```{r}
-# Code for figure 3.1
+#Validating
 library(readr)
 
 new<- read_csv("IDCJAC0009_009021_1800_Data.csv") #daily dataset
